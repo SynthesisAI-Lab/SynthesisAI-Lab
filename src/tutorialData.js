@@ -1,4 +1,6 @@
-const asset = (path) => new URL(`./tutorial_assets/${path}`, import.meta.url).href;
+// Preload tutorial images via Vite glob so they are included in the build and work with a dynamic lookup.
+const images = import.meta.glob('./assets/tutorial_assets/**/*.{png,jpg,jpeg}', { eager: true, import: 'default' });
+const asset = (path) => images[`./assets/tutorial_assets/${path}`];
 
 export const signInSteps = [
     {

@@ -1,9 +1,9 @@
 # Tutorial page bundle
 
-This directory collects everything for the tutorial page:
+This repository collects everything for the tutorial page:
 
-- `Index.jsx` and `tutorialData.js`
-- `tutorial_assets/` screenshots referenced from the data file
+- [src/Tutorial.jsx](src/Tutorial.jsx) and [src/tutorialData.js](src/tutorialData.js)
+- [src/assets/tutorial_assets/](src/assets/tutorial_assets/) screenshots referenced from the data file
 
 ## Referencing assets
 

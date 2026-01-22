@@ -7,7 +7,7 @@ const { Header, Content, Footer } = Layout;
 const { Title, Paragraph } = Typography;
 const { useBreakpoint } = Grid;
 
-const landingImage = new URL('./tutorial_assets/landing_page.png', import.meta.url).href;
+const landingImage = new URL('./assets/tutorial_assets/landing_page.png', import.meta.url).href;
 
 const StepViewer = ({ steps, onNextTab, onPrevTab, isActive, onStepChange, targetStep }) => {
     const screens = useBreakpoint();
@@ -145,7 +145,7 @@ const StepViewer = ({ steps, onNextTab, onPrevTab, isActive, onStepChange, targe
                                 type="primary"
                                 shape={currentStep === steps.length - 1 ? 'round' : 'circle'}
                                 icon={<RightOutlined />}
-                                iconPosition="end"
+                                iconPlacement="end"
                                 onClick={nextStep}
                                 disabled={currentStep === steps.length - 1 && !onNextTab}
                                 size="large"
@@ -380,7 +380,7 @@ const Tutorial = ({ onGoHome }) => {
                 <div style={{ color: '#001529', fontSize: '1.2rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: 10 }}>
                     Synthesis AI Lab <span style={{ fontWeight: 'normal', fontSize: '0.9rem', color: '#888', marginLeft: 8 }}>Tutorial</span>
                 </div>
-                <Button type="primary" icon={<RocketOutlined />} onClick={onGoHome}>
+                <Button type="primary" icon={<RocketOutlined />} onClick={() => window.location.href = 'http://74.249.196.43/'}>
                     Launch App
                 </Button>
             </Header>
