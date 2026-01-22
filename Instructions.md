@@ -68,30 +68,44 @@ Image resources are located in the **`src/assets/tutorial_assets/`** directory, 
 
 ## 4. Deployment to GitHub Pages
 
-Once you have finished modifications and verified them locally, use the following command to deploy changes online.
+Once you have finished modifications and verified them locally, you can deploy the changes online.
 
-1. **Ensure Changes are Committed**:
-   Please commit your code to the local git repository first (you don't strictly need to push to the main branch immediately, but the git state must be clean for the deployment script).
+### Option 1: One-Click Script (Recommended)
 
-2. **Run Deployment Script**:
-   Run in the terminal:
-   
-   ```bash
-   npm run deploy
-   ```
+We have provided a script that automatically handles git commit and deployment.
 
-   **This command automatically performs the following:**
-   - Runs `vite build`: Bundles the project into the `dist` folder.
-   - Runs `gh-pages -d dist`: Pushes the content of the `dist` folder to the remote repository's `gh-pages` branch.
+1.  Run the script in your terminal:
+    ```bash
+    ./deploy.sh
+    ```
+2.  Follow the prompts. It will ask for a commit message (or press Enter to use the default).
+3.  Wait for the success message.
 
-3. **Check Online Version**:
-   After the deployment script completes, GitHub Actions or GitHub Pages service may take a few minutes to update and clear cache. Wait a moment and then visit your GitHub Pages URL to see the latest content.
+### Option 2: Manual Deployment
+
+If you prefer to run commands manually:
+
+1.  **Commit Changes**:
+    ```bash
+    git add .
+    git commit -m "Your commit message"
+    ```
+
+2.  **Deploy**:
+    ```bash
+    npm run deploy
+    ```
+    This bundles the project and pushes it to the `gh-pages` branch.
+
+3.  **Check Online Version**:
+    After deployment, GitHub Pages may take a few minutes to update.
 
 ## Command Summary
 
 | Command | Description |
 |---------|-------------|
+| `./deploy.sh` | **Automated update & deploy script** |
 | `npm install` | Install dependencies |
 | `npm run dev` | Start local development server |
 | `npm run build` | Build production version (build only, no deploy) |
-| `npm run deploy` | Build and deploy to GitHub Pages |
+| `npm run deploy` | Build and deploy (manual mode) |
