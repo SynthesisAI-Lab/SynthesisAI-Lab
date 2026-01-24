@@ -403,16 +403,28 @@ const Tutorial = ({ onGoHome }) => {
                         <Paragraph style={{ fontSize: '1.1rem', color: '#666', lineHeight: 1.6 }}>
                             AI-augmented collaborative learning environment.
                         </Paragraph>
-                        <Button
-                            type="primary"
-                            size="large"
-                            shape="round"
-                            icon={<PlayCircleOutlined />}
-                            onClick={scrollToTutorial}
-                            style={{ height: 48, padding: '0 32px', fontSize: 16, marginTop: 16, boxShadow: '0 4px 14px rgba(22, 119, 255, 0.3)' }}
-                        >
-                            Start Tutorial
-                        </Button>
+                        <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap', marginTop: 16 }}>
+                            <Button
+                                type="primary"
+                                size="large"
+                                shape="round"
+                                icon={<PlayCircleOutlined />}
+                                onClick={scrollToTutorial}
+                                style={{ height: 48, padding: '0 32px', fontSize: 16, boxShadow: '0 4px 14px rgba(22, 119, 255, 0.3)' }}
+                            >
+                                Start Tutorial
+                            </Button>
+                            <Button
+                                type="default"
+                                size="large"
+                                shape="round"
+                                icon={<RocketOutlined />}
+                                onClick={() => window.location.href = 'http://74.249.196.43/'}
+                                style={{ height: 48, padding: '0 32px', fontSize: 16, borderColor: '#1677ff', color: '#1677ff' }}
+                            >
+                                Launch App
+                            </Button>
+                        </div>
                     </div>
 
                     <div style={{
