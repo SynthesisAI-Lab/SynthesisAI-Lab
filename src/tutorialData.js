@@ -93,7 +93,7 @@ export const synthesisCanvasSteps = [
     //     image: asset('3_synthesis_canvas/9_graph_to_text.png'),
     //     title: 'Backlink Reference*',
     //     description: 'Annotations and claims referenced in the Synthesis Editor link back to the Knowledge Graph so you can trace ideas and view their original context. * Coming soon'
-    // },
+    // // },
     {
         image: asset('3_synthesis_canvas/10_synthesis_export.png'),
         title: 'Synthesis Export',
