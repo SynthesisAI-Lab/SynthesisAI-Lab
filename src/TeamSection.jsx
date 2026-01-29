@@ -90,14 +90,14 @@ const TeamSection = () => {
     const team = [
         {
             name: 'Xinran Zhu',
-            role: 'Project Director|PI',
+            role: 'Project Director | PI',
             title: 'Assistant Professor @UIUC',
             image: xinranImg,
             website: 'https://zhu-xinran.com/',
         },
          {
             name: 'Liam Magee',
-            role: 'Collaborator|Co-PI',
+            role: 'Collaborator | Co-PI',
             title: 'Professor @UIUC',
             image: liamImg,
             website: 'https://education.illinois.edu/profile/liam-magee',
