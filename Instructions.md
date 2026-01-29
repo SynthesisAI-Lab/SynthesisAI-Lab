@@ -66,6 +66,27 @@ Image resources are located in the **`src/assets/tutorial_assets/`** directory, 
 - **Entry File**: `src/main.jsx`.
 - **Styles**: The project uses the Ant Design component library; styles are mainly controlled via inline styles or component properties.
 
+### 3.4 Updating/Adding Team Members
+#### Location
+Team member data is stored in `/src/TeamSection.jsx` in the `TeamSection` component.
+#### Adding a New Team Member
+1. **Add the image import** at the top of the file:
+   ```jsx
+   import newMemberImg from './assets/team/newmember.jpeg';
+
+2. Add the member to the team array in the TeamSection component:
+    - name: 'Member Name',
+   - role: 'Role/Position',
+    - title: 'Title/Affiliation',
+   -  image: newMemberImg, 
+   - website: 'https://example.com'
+
+3. Add the image file to /src/assets/team/ folder as a JPEG or PNG file.
+
+#### Updating an Existing Member
+Simply modify the corresponding object in the team array with the new information.
+
+
 ## 4. Deployment to GitHub Pages
 
 Once you have finished modifications and verified them locally, you can deploy the changes online.
