@@ -90,10 +90,17 @@ const TeamSection = () => {
     const team = [
         {
             name: 'Xinran Zhu',
-            role: 'Project Director',
+            role: 'Project Director|PI',
             title: 'Assistant Professor @UIUC',
             image: xinranImg,
             website: 'https://zhu-xinran.com/',
+        },
+         {
+            name: 'Liam Magee',
+            role: 'Collaborator|Co-PI',
+            title: 'Professor @UIUC',
+            image: liamImg,
+            website: 'https://education.illinois.edu/profile/liam-magee',
         },
         {
             name: 'Bo Shui',
@@ -116,13 +123,6 @@ const TeamSection = () => {
             image: congImg,
             website: 'https://www.linkedin.com/in/cong-wang-b560aa290/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app',
         },     
-        {
-            name: 'Liam Magee',
-            role: 'Collaborator',
-            title: 'Professor @UIUC',
-            image: liamImg,
-            website: 'https://education.illinois.edu/profile/liam-magee',
-        },
         {
             name: 'Jooeun Shim',
             role: 'Collaborator',
