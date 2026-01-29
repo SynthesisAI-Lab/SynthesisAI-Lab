@@ -1,13 +1,30 @@
 import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react';
-import { Layout, Typography, Button, Tabs, theme, Row, Col, Grid } from 'antd';
+import { Layout, Typography, Button, Tabs, theme, Row, Col, Grid, ConfigProvider } from 'antd';
 import { RocketOutlined, PlayCircleOutlined, LeftOutlined, RightOutlined, CommentOutlined, DeploymentUnitOutlined, EditOutlined, FileTextOutlined, ArrowRightOutlined, FolderAddOutlined } from '@ant-design/icons';
 import { signInSteps, workspaceSteps, synthesisCanvasSteps, snapshotSteps } from './tutorialData';
+import TeamSection from './TeamSection';
 
 const { Header, Content, Footer } = Layout;
 const { Title, Paragraph } = Typography;
 const { useBreakpoint } = Grid;
 
 const landingImage = new URL('./assets/tutorial_assets/landing_page.png', import.meta.url).href;
+
+// Import techy font
+const fontLink = document.createElement('link');
+fontLink.href = 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap';
+fontLink.rel = 'stylesheet';
+document.head.appendChild(fontLink);
+
+const parseBoldText = (text) => {
+    const parts = text.split(/(\*\*.*?\*\*)/);
+    return parts.map((part, idx) => {
+        if (part.startsWith('**') && part.endsWith('**')) {
+            return <strong key={idx}>{part.slice(2, -2)}</strong>;
+        }
+        return <span key={idx}>{part}</span>;
+    });
+};
 
 const StepViewer = ({ steps, onNextTab, onPrevTab, isActive, onStepChange, targetStep }) => {
     const screens = useBreakpoint();
@@ -110,18 +127,26 @@ const StepViewer = ({ steps, onNextTab, onPrevTab, isActive, onStepChange, targe
                 </Col>
                 <Col xs={24} lg={10}>
                     <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingLeft: screens.lg ? 40 : 0 }}>
-                        <Title level={3} style={{ marginBottom: 16, marginTop: 0, fontSize: '1.75rem' }}>{step.title}</Title>
-                        <Paragraph style={{ fontSize: '1rem', color: '#555', marginBottom: 32, lineHeight: 1.6 }}>
-                            {step.description}
-                        </Paragraph>
+                        <Title level={3} style={{ marginBottom: 16, marginTop: 0, fontSize: '1.3rem' }}>{step.title}</Title>
+                        {Array.isArray(step.description) ? (
+                            <ol style={{ fontSize: '0.9rem', color: '#555', marginBottom: 32, lineHeight: 1.6, paddingLeft: 20 }}>
+                                {step.description.map((item, idx) => (
+                                    <li key={idx}>{parseBoldText(item)}</li>
+                                ))}
+                            </ol>
+                        ) : (
+                            <Paragraph style={{ fontSize: '0.88rem', color: '#555', marginBottom: 32, lineHeight: 1.3 }}>
+                                {parseBoldText(step.description)}
+                            </Paragraph>
+                        )}
 
                         <div style={{ display: 'flex', gap: 8, marginBottom: 30, flexWrap: 'wrap' }}>
                             {steps.map((_, index) => (
                                 <div
                                     key={index}
                                     style={{
-                                        width: 10, height: 10, borderRadius: '50%',
-                                        background: index === currentStep ? '#1677ff' : '#ddd',
+                                        width: 8, height: 8, borderRadius: '50%',
+                                        background: index === currentStep ? '#4f46e5' : '#ddd',
                                         cursor: 'pointer',
                                         transition: 'background 0.3s'
                                     }}
@@ -130,14 +155,14 @@ const StepViewer = ({ steps, onNextTab, onPrevTab, isActive, onStepChange, targe
                             ))}
                         </div>
 
-                        <div style={{ display: 'flex', gap: 16 }}>
+                        <div style={{ display: 'flex', gap: 15 }}>
                             <Button
                                 shape={currentStep === 0 && onPrevTab ? 'round' : 'circle'}
                                 icon={<LeftOutlined />}
                                 onClick={prevStep}
                                 disabled={currentStep === 0 && !onPrevTab}
-                                size="large"
-                                style={currentStep === 0 && onPrevTab ? { padding: '0 24px' } : {}}
+                                size="small"
+                                style={currentStep === 0 && onPrevTab ? { padding: '0 15px' } : {}}
                             >
                                 {currentStep === 0 && onPrevTab ? 'Previous Tab' : null}
                             </Button>
@@ -148,8 +173,8 @@ const StepViewer = ({ steps, onNextTab, onPrevTab, isActive, onStepChange, targe
                                 iconPlacement="end"
                                 onClick={nextStep}
                                 disabled={currentStep === steps.length - 1 && !onNextTab}
-                                size="large"
-                                style={currentStep === steps.length - 1 ? { padding: '0 24px' } : {}}
+                                size="small"
+                                style={currentStep === steps.length - 1 ? { padding: '0 15px' } : {}}
                             >
                                 {currentStep === steps.length - 1 ? 'Next Tab' : null}
                             </Button>
@@ -164,69 +189,73 @@ const StepViewer = ({ steps, onNextTab, onPrevTab, isActive, onStepChange, targe
 const ProjectBigPicture = ({ innerRef, activeStep, onStepClick }) => {
     const screens = useBreakpoint();
     const steps = [
-        { icon: <CommentOutlined />, title: <>Student Social<br />Annotation</> },
-        { icon: <FolderAddOutlined />, title: <>Workspace<br />Management</> },
-        { icon: <DeploymentUnitOutlined />, title: <>AI-Generated<br />Knowledge Graph</> },
-        { icon: <EditOutlined />, title: <>Human-AI<br />Collaborative Edit</> },
-        { icon: <FileTextOutlined />, title: <>Graph to<br />Synthesis</> },
+        { icon: <CommentOutlined />, title: <>Social Annotation<br />of Course Readings</> },
+        { icon: <RocketOutlined />, title: <>User Registration<br />and Log In</> },
+        { icon: <FolderAddOutlined />, title: <>Synthesis Workspace Setup<br />(instructor only)</> },
+        { icon: <DeploymentUnitOutlined />, title: <>Knowledge Synthesis<br />Graph Generation</> },
+        { icon: <EditOutlined />, title: <>Human–AI<br />Collaborative Graph Iteration</> },
+        { icon: <FileTextOutlined />, title: <>Graph-to-Text<br />Synthesis</> },
     ];
 
     return (
         <div ref={innerRef} style={{ padding: screens.md ? '10px 20px' : '10px 20px', background: '#fff' }}>
             <div style={{ maxWidth: 1000, margin: '0 auto' }}>
-                <Title level={2} style={{ textAlign: 'center', marginBottom: 10, marginTop: 20, fontSize: '1.75rem' }}>
+                <Title level={2} style={{ textAlign: 'center', marginBottom: 10, marginTop: 35, fontSize: '2rem' }}>
                     How It Works
                 </Title>
-                <div style={{ textAlign: 'center', marginBottom: 20, color: '#888', fontSize: '0.9rem' }}>
-                    Click on the icons to view steps
+                <div style={{ textAlign: 'center', marginBottom: 15, color: '#707070', fontSize: '1rem', lineHeight: 1.8 }}>
+                    SAIL’s AI partner helps students analyze and connect ideas from their text-based discussions. 
+                    <br />In the current demo, these discussions take place as social annotations on the <a href="https://app.perusall.com/" target="_blank" rel="noopener noreferrer" style={{ color: '#4f46e5', textDecoration: 'none' }}>Perusall</a> platform.
+                    <br /><br />Click the icons to explore the workflow. <br />
                 </div>
-                <Row gutter={[16, 24]} justify="center" align="stretch" style={{ marginBottom: 20 }}>
+                <Row gutter={[8, 16]} justify="center" align="stretch" style={{ marginBottom: 20 }}>
                     {steps.map((step, index) => {
                         const isActive = index === activeStep;
-                        const color = isActive ? '#fff' : '#1677ff';
-                        const bgColor = isActive ? '#1677ff' : '#f5f5f5';
+                        const color = isActive ? '#fff' : '#4f46e5';
+                        const bgColor = isActive ? '#4f46e5' : '#f5f5f5';
 
                         return (
                             <React.Fragment key={index}>
-                                <Col xs={24} sm={12} md={4} style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }}>
+                                <Col xs={24} sm={12} md={3} style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }}>
                                     <div
-                                        onClick={() => onStepClick(index)}
+                                        onClick={() => index !== 0 && onStepClick(index)}
                                         style={{
                                             display: 'flex',
                                             flexDirection: 'column',
                                             alignItems: 'center',
                                             textAlign: 'center',
-                                            gap: 8,
+                                            gap: 10,
                                             opacity: 1,
                                             transform: isActive ? 'scale(1.05)' : 'scale(1)',
                                             transition: 'all 0.3s ease',
-                                            cursor: 'pointer'
+                                            cursor: index === 0 ? 'default' : 'pointer'
                                         }}
                                     >
                                         <div style={{
-                                            fontSize: 28,
+                                            fontSize: 30,
                                             color: color,
                                             background: bgColor,
-                                            width: 64,
-                                            height: 64,
+                                            width: 68,
+                                            height: 68,
                                             borderRadius: '50%',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
-                                            boxShadow: isActive ? '0 8px 20px rgba(22, 119, 255, 0.4)' : 'none',
-                                            transition: 'all 0.3s ease'
+                                            boxShadow: isActive ? '0 4px 12px rgba(22, 119, 255, 0.3)' : 'none',
+                                            transition: 'all 0.3s ease',
+                                            opacity: index === 0 ? 0.5 : 1
                                         }}>
                                             {step.icon}
                                         </div>
-                                        <div style={{ fontSize: '0.9rem', fontWeight: isActive ? 600 : 400, lineHeight: 1.4, color: '#333' }}>
+                                        <div style={{ fontSize: '0.82rem', fontWeight: isActive ? 600 : 400, lineHeight: 1.3, color: '#333', opacity: index === 0 ? 0.5 : 1 }}>
                                             {step.title}
                                         </div>
                                     </div>
                                 </Col>
                                 {index < steps.length - 1 && (
-                                    <Col xs={0} md={1} style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }}>
-                                        <div style={{ height: 64, display: 'flex', alignItems: 'center' }}>
-                                            <ArrowRightOutlined style={{ fontSize: 20, color: '#bfbfbf' }} />
+                                    <Col xs={0} md={0} style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }}>
+                                        <div style={{ height: 52, display: 'flex', alignItems: 'center' }}>
+                                            <ArrowRightOutlined style={{ fontSize: 16, color: '#bfbfbf' }} />
                                         </div>
                                     </Col>
                                 )}
@@ -248,6 +277,7 @@ const Tutorial = ({ onGoHome }) => {
     const [activeTab, setActiveTab] = useState('1');
     const [tabSteps, setTabSteps] = useState({ '1': 0, '2': 0, '3': 0, '4': 0 });
     const [targetStepMap, setTargetStepMap] = useState({ '1': null, '2': null, '3': null, '4': null });
+    const [lastClickedIcon, setLastClickedIcon] = useState(0);
     const tutorialSectionRef = useRef(null);
     const howItWorksRef = useRef(null);
 
@@ -274,24 +304,30 @@ const Tutorial = ({ onGoHome }) => {
         let targetTab = '1';
         let targetStep = 0;
 
+        setLastClickedIcon(index);
+
         switch (index) {
             case 0:
                 targetTab = '1';
                 targetStep = 0;
                 break;
             case 1:
-                targetTab = '2';
+                targetTab = '1';
                 targetStep = 0;
                 break;
             case 2:
-                targetTab = '3';
+                targetTab = '2';
                 targetStep = 0;
                 break;
             case 3:
                 targetTab = '3';
-                targetStep = 2;
+                targetStep = 0;
                 break;
             case 4:
+                targetTab = '3';
+                targetStep = 2;
+                break;
+            case 5:
                 targetTab = '3';
                 targetStep = 6;
                 break;
@@ -307,13 +343,13 @@ const Tutorial = ({ onGoHome }) => {
     };
 
     const getActiveBigPictureStep = () => {
-        if (activeTab === '1') return 1;
-        if (activeTab === '2') return 1;
+        if (activeTab === '1') return lastClickedIcon;
+        if (activeTab === '2') return 2;
         if (activeTab === '3') {
             const step = tabSteps['3'];
-            if (step <= 1) return 2;
-            if (step <= 5) return 3;
-            return 4;
+            if (step <= 1) return 3;
+            if (step <= 5) return 4;
+            return 5;
         }
         return -1;
     };
@@ -375,7 +411,14 @@ const Tutorial = ({ onGoHome }) => {
     ), [colorBgContainer]);
 
     return (
-        <Layout style={{ height: '100vh', background: '#fff' }}>
+        <ConfigProvider
+            theme={{
+                token: {
+                    colorPrimary: '#4f46e5',
+                },
+            }}
+        >
+            <Layout style={{ height: '100vh', background: '#fff' }}>
             <Header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(255, 255, 255, 0.9)', backdropFilter: 'blur(10px)', padding: '0 24px', borderBottom: '1px solid #f0f0f0', zIndex: 100 }}>
                 <div style={{ color: '#001529', fontSize: '1.2rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: 10 }}>
                     Synthesis AI Lab <span style={{ fontWeight: 'normal', fontSize: '0.9rem', color: '#888', marginLeft: 8 }}>Tutorial</span>
@@ -392,39 +435,47 @@ const Tutorial = ({ onGoHome }) => {
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     padding: '60px 20px 0',
-                    background: 'linear-gradient(180deg, #f0f5ff 0%, #ffffff 100%)',
+                    background: 'linear-gradient(180deg, #f0f5ff 0%, #f8fafc 100%)',
                     minHeight: 'min(calc(100vh - 60px), auto)',
                     overflow: 'hidden'
                 }}>
                     <div style={{ textAlign: 'center', maxWidth: 800, marginBottom: 40 }}>
-                        <Title level={1} style={{ fontSize: '2.5rem', marginBottom: 16, letterSpacing: '-1px' }}>
-                            Synthesis<span style={{ color: '#1677ff' }}> AI</span> Lab
+                        <Title level={1} style={{ fontSize: '2.8rem', marginBottom: 16, letterSpacing: '-0.5px', fontFamily: "'JetBrains Mono', monospace", fontWeight: 700 }}>
+                            SAIL: <span style={{ color: '#4f46e5' }}> Synthesis</span> AI Lab
                         </Title>
-                        <Paragraph style={{ fontSize: '1.1rem', color: '#666', lineHeight: 1.6 }}>
-                            AI-augmented collaborative learning environment.
+                        <Paragraph style={{ fontSize: '1.2rem', color: '#585858', lineHeight: 1.6, marginBottom: 8 }}>
+                            Connect ideas. Synthesize knowledge. Spark creative knowledge work.
+                        
                         </Paragraph>
-                        <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap', marginTop: 16 }}>
+                         <Paragraph style={{ fontSize: '1rem', color: '#585858', marginTop: 0 }}>
+                           Grounded in Learning Sciences and HCI research. 
+                        </Paragraph>                       
+                        
+                        <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginTop: 40 }}>
                             <Button
                                 type="primary"
-                                size="large"
+                                size="middle"
                                 shape="round"
                                 icon={<PlayCircleOutlined />}
                                 onClick={scrollToTutorial}
-                                style={{ height: 48, padding: '0 32px', fontSize: 16, boxShadow: '0 4px 14px rgba(22, 119, 255, 0.3)' }}
+                                style={{ height: 40, padding: '0 25px', fontSize: 15, boxShadow: '0 2px 8px rgba(22, 20, 58, 0.2)', fontWeight: 500 }}
                             >
                                 Start Tutorial
                             </Button>
                             <Button
                                 type="default"
-                                size="large"
+                                size="middle"
                                 shape="round"
                                 icon={<RocketOutlined />}
                                 onClick={() => window.location.href = 'http://74.249.196.43/'}
-                                style={{ height: 48, padding: '0 32px', fontSize: 16, borderColor: '#1677ff', color: '#1677ff' }}
+                                style={{ height: 40, padding: '0 25px', fontSize: 15, borderColor: '#4f46e5', color: '#4f46e5', fontWeight: 500 }}
                             >
                                 Launch App
                             </Button>
                         </div>
+                        <Paragraph style={{ fontSize: '0.95rem', color: '#999', marginTop: 24 }}>
+                            Interested in a demo? <a href="mailto:xrzhu@illinois.edu" style={{ color: '#4f46e5', textDecoration: 'none' }}>Get in touch</a>
+                        </Paragraph>
                     </div>
 
                     <div style={{
@@ -445,7 +496,7 @@ const Tutorial = ({ onGoHome }) => {
                             style={{ width: '100%', height: 'auto', display: 'block' }}
                             onError={(e) => {
                                 e.target.style.display = 'none';
-                                e.target.parentNode.innerHTML = '<div style="padding: 100px; text-align: center; color: #1677ff; font-size: 1.5rem;">Dashboard Preview Image</div>';
+                                e.target.parentNode.innerHTML = '<div style="padding: 100px; text-align: center; color: #4f46e5; font-size: 1.5rem;">Dashboard Preview Image</div>';
                             }}
                         />
                     </div>
@@ -467,11 +518,17 @@ const Tutorial = ({ onGoHome }) => {
                     </div>
                 </div>
 
-                <Footer style={{ textAlign: 'center', background: '#f8f9fa' }}>
-                    Synthesis AI Lab ©{new Date().getFullYear()}
+                <TeamSection />
+
+                <Footer style={{ textAlign: 'center', background: '#f8f9fa', padding: '40px 20px' }}>
+                    <Paragraph style={{ marginBottom: 8 }}>
+                        Synthesis AI Lab ©{new Date().getFullYear()}
+                    </Paragraph>
+
                 </Footer>
             </Content>
-        </Layout>
+            </Layout>
+        </ConfigProvider>
     );
 };
 
